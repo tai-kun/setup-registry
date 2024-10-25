@@ -49,6 +49,11 @@ jobs:
       - name: Set up Registry
         uses: ./
 
+      - run: curl localhost:5000
+      - run: curl localhost:5000/
+      - run: curl localhost:5000/v2
+      - run: curl localhost:5000/v2/
+
       - uses: docker/login-action@v3
         with:
           registry: localhost:5000
