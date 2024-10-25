@@ -50,7 +50,7 @@ jobs:
         uses: ./
 
       - name: Registry にログイン
-        run: docker login localhost:5000 -u testuser -p testpass
+        run: docker login -u testuser -p testpass https://localhost:5000
 
       - name: イメージを用意
         run: |

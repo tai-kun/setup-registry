@@ -94,15 +94,14 @@ async function main(
     );
   }
   {
+    const configFile = JSON.stringify(path.join(configdir, "config.yml"));
     const out = execSync(
-      `${registry} serve "$CONFIG_FILE" &\necho $!`,
+      `${registry} serve ${configFile} &\necho $!`,
       {
         encoding: "utf-8",
         stdio: "pipe",
         env: {
           ...process.env,
-          REGISTRY: registry,
-          CONFIG_FILE: path.join(configdir, "config.yml"),
           // https://github.com/distribution/distribution/issues/4270
           OTEL_TRACES_EXPORTER: "none",
         },
