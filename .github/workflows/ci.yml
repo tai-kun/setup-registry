@@ -55,8 +55,8 @@ jobs:
       - uses: docker/login-action@v3
         with:
           registry: localhost:5000
-          username: testuser
-          password: testpass
+          username: registry
+          password: registry
 
       - name: イメージを用意
         run: |
