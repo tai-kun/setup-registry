@@ -48,11 +48,6 @@ jobs:
 
       - name: Set up Registry
         uses: ./
-        id: setup
-
-      - name: outputs
-        run: |
-          echo ${{ steps.setup.outputs.pid }}
 
       - name: Registry にログイン
         run: docker login -u testuser -p testpass localhost:5000

@@ -10,10 +10,10 @@ inputs:
     description: ユーザーの一覧
     required: false
     default: testuser:testpass
-  addr:
-    description: アドレス
+  port:
+    description: ポート番号
     required: false
-    default: :5000
+    default: "5000"
 runs:
   using: node20
   main: dist/main.js
