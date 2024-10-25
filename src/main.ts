@@ -81,8 +81,8 @@ async function main(
       },
     });
 
-    const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
     const certFile = JSON.stringify(path.join(certsdir, "domain.crt"));
+    const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
     execSync(
       `${mkcert} -cert-file ${certFile} -key-file ${keyFile} localhost`,
       {
@@ -93,23 +93,23 @@ async function main(
         },
       },
     );
-    console.log("domain.crt");
-    console.log(execSync(`cat ${certFile}`, { stdio: "inherit" }));
+    console.log("domain.crt:");
+    execSync(`cat ${certFile}`, { stdio: "inherit" });
     console.log();
-    console.log("domain.key");
-    console.log(execSync(`cat ${keyFile}`, { stdio: "inherit" }));
+    console.log("domain.key:");
+    execSync(`cat ${keyFile}`, { stdio: "inherit" });
     console.log();
   });
 
-  await run("registry を起動", async () => {
+  run("registry を起動", async () => {
     // https://github.com/distribution/distribution/issues/4270
     execSync(
       `docker run \\
       -d \\
       --restart=always \\
       --name registry \\
-      -p ${inputs.port}:5000 \\
       -e OTEL_TRACES_EXPORTER=none \\
+      -p ${inputs.port}:5000 \\
       -v ${JSON.stringify(authdir + ":/auth")} \\
       -v ${JSON.stringify(certsdir + ":/certs")} \\
       -v ${JSON.stringify(configdir + ":/config")} \\
@@ -120,8 +120,9 @@ async function main(
         stdio: "inherit",
       },
     );
-    await setTimeout(1e3);
   });
+
+  await setTimeout(1e3);
 }
 
 function run<T>(title: string, cb: () => T): T {

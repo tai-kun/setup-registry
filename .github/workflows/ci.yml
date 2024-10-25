@@ -49,8 +49,11 @@ jobs:
       - name: Set up Registry
         uses: ./
 
-      - name: Registry にログイン
-        run: docker login -u testuser -p testpass localhost:5000
+      - uses: docker/login-action@v3
+        with:
+          registry: localhost:5000
+          username: testuser
+          password: testpass
 
       - name: イメージを用意
         run: |
