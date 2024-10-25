@@ -10,7 +10,7 @@ import CONFIG_YML from "./config.yml.js";
 main({
   version: getInput("version") || "latest",
   users: getInput("users"),
-  addr: getInput("addr") || ":5000",
+  addr: getInput("addr") || "0.0.0.0:5000",
 })
   .then(({ pid }) => {
     setOutput("pid", pid);
