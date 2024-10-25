@@ -148,7 +148,7 @@ async function downloadRegistry(
       continue;
     }
 
-    execSync("wget -O registry.tar.gz" + url, { stdio: "inherit" });
+    execSync("wget -O registry.tar.gz " + url, { stdio: "inherit" });
     execSync("tar -xzvf registry.tar.gz registry", { stdio: "inherit" });
     execSync("rm registry.tar.gz", { stdio: "inherit" });
     break;
