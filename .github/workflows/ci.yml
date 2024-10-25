@@ -22,8 +22,6 @@ jobs:
 
       - run: node --run test
 
-      - run: node --run build
-
       # - name: Set up Go
       #   uses: actions/setup-go@v5
       #   with:
@@ -62,3 +60,21 @@ jobs:
 
       - name: ローカルレジストリにプッシュ
         run: docker image push localhost:5000/static:latest
+
+      - name: Checkout
+        run: |
+          git checkout -b auto-build
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: ビルド
+        run: node --run build
+
+      - name: コミット&プッシュ
+        run: |
+          git add dist
+          git commit -m "build: dist ディレクトリを更新"
+          git push origin --delete auto-build
+          git push origin          auto-build
+
+          echo '::notice::https://github.com/tai-kun/setup-registry/pull/new/auto-build'
