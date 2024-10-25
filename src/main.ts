@@ -55,6 +55,19 @@ async function main(
   fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
   fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
 
+  execSync(`chmod u+x "$MKCERT"`, {
+    stdio: "inherit",
+    env: {
+      MKCERT: mkcert,
+    },
+  });
+  execSync(`chmod u+x "$REGISTRY"`, {
+    stdio: "inherit",
+    env: {
+      REGISTRY: registry,
+    },
+  });
+
   execSync(`"$MKCERT" -install`, {
     stdio: "inherit",
     env: {
