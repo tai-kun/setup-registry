@@ -1,4 +1,5 @@
-import { getInput, setFailed } from "@actions/core";
+import { restoreCache } from "@actions/cache";
+import { getInput, saveState, setFailed } from "@actions/core";
 import { execSync } from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
@@ -10,6 +11,7 @@ main({
   version: getInput("version") || "latest",
   users: getInput("users"),
   port: getInput("port") || "5000",
+  name: getInput("name") || "registry",
 })
   .then(() => {
     process.exit(0);
@@ -24,6 +26,7 @@ async function main(
     version: string;
     users: string;
     port: string;
+    name: string;
   },
 ) {
   const users = inputs.users.split(",").filter(Boolean).map(v => ({
@@ -107,7 +110,7 @@ async function main(
       `docker run \\
       -d \\
       --restart=always \\
-      --name registry \\
+      --name ${JSON.stringify(inputs.name)} \\
       -e OTEL_TRACES_EXPORTER=none \\
       -p ${inputs.port}:5000 \\
       -v ${JSON.stringify(authdir + ":/auth")} \\
@@ -151,11 +154,22 @@ async function downloadMkcert(
   arch: string,
   version: string,
 ): Promise<string> {
-  const url = "https://github.com/FiloSottile/mkcert/releases/download/v"
-    + version + "/mkcert-v" + version + "-" + os + "-" + arch;
-  execSync("wget -q -O mkcert " + url, { stdio: "inherit" });
+  const bin = "mkcert-v" + version + "-" + os + "-" + arch;
+  const key = bin;
+  const mkc = path.join(process.cwd(), "mkcert");
+  const restored = await restoreCache([mkc], key);
 
-  return path.join(process.cwd(), "mkcert");
+  if (restored) {
+    saveState("cache", JSON.stringify({ hit: true, mkc, key }));
+    return mkc;
+  }
+
+  const url = "https://github.com/FiloSottile/mkcert/releases/download/v"
+    + version + "/" + bin;
+  execSync("wget -q -O mkcert " + url, { stdio: "inherit" });
+  saveState("cache", JSON.stringify({ hit: false, mkc, key }));
+
+  return mkc;
 }
 
 function generateHtpasswdString(

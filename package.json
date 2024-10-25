@@ -10,6 +10,7 @@
     "build": "esbuild --target=node20 --outfile=dist/main.js --bundle --minify --platform=node --format=cjs src/main.ts && esbuild --target=node20 --outfile=dist/post.js --bundle --minify --platform=node --format=cjs src/post.ts"
   },
   "dependencies": {
+    "@actions/cache": "^3.2.4",
     "@actions/core": "^1.11.1"
   },
   "devDependencies": {

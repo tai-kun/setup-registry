@@ -14,7 +14,12 @@ inputs:
     description: ポート番号
     required: false
     default: "5000"
+  name:
+    description: コンテナ名
+    required: false
+    default: registry
 runs:
   using: node20
   main: dist/main.js
   post: dist/post.js
+  post-if: success()
