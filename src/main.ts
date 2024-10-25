@@ -60,51 +60,42 @@ async function main(
     fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
   }
 
-  const mkcert = await downloadMkcert("linux", "amd64", "1.4.4");
-  const registry = await downloadRegistry("linux", "amd64", inputs.version);
+  const mkcert = JSON.stringify(
+    await downloadMkcert("linux", "amd64", "1.4.4"),
+  );
+  const registry = JSON.stringify(
+    await downloadRegistry("linux", "amd64", inputs.version),
+  );
 
   {
-    execSync(`chmod u+x "$MKCERT"`, {
-      stdio: "inherit",
-      env: {
-        ...process.env,
-        MKCERT: mkcert,
-      },
-    });
-    execSync(`chmod u+x "$REGISTRY"`, {
-      stdio: "inherit",
-      env: {
-        ...process.env,
-        REGISTRY: registry,
-      },
-    });
+    execSync(`chmod u+x ${mkcert}`, { stdio: "inherit" });
+    execSync(`chmod u+x ${registry}`, { stdio: "inherit" });
   }
   {
-    execSync(`"$MKCERT" -install`, {
+    execSync(`${mkcert} -install`, {
       stdio: "inherit",
       env: {
         ...process.env,
-        MKCERT: mkcert,
         CAROOT: carootdir,
       },
     });
+
+    const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
+    const certFile = JSON.stringify(path.join(certsdir, "domain.crt"));
     execSync(
-      `"$MKCERT" -cert-file "$CERT_FILE" -key-file "$KEY_FILE" localhost`,
+      `${mkcert} -cert-file ${keyFile} -key-file ${certFile} localhost`,
       {
         stdio: "inherit",
         env: {
           ...process.env,
-          MKCERT: mkcert,
           CAROOT: carootdir,
-          KEY_FILE: path.join(certsdir, "domain.key"),
-          CERT_FILE: path.join(certsdir, "domain.crt"),
         },
       },
     );
   }
   {
     const out = execSync(
-      `"$REGISTRY" serve "$CONFIG_FILE" &; echo $!`,
+      `${registry} serve "$CONFIG_FILE" &\necho $!`,
       {
         encoding: "utf-8",
         stdio: "pipe",
