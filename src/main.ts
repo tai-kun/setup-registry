@@ -34,6 +34,13 @@ async function main(
     password: v.slice(v.indexOf(":") + 1),
   }));
 
+  if (users.length === 0) {
+    users.push({
+      username: "registry",
+      password: "registry",
+    });
+  }
+
   const tmpdir = os.tmpdir();
   const datadir = path.join(tmpdir, "registry", "data");
   const authdir = path.join(tmpdir, "registry", "auth");

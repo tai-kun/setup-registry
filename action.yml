@@ -9,7 +9,7 @@ inputs:
   users:
     description: ユーザーの一覧
     required: false
-    default: testuser:testpass
+    default: registry:registry
   port:
     description: ポート番号
     required: false
