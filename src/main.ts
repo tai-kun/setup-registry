@@ -44,7 +44,7 @@ async function main(
   fs.mkdirSync(configdir, { recursive: true });
 
   {
-    execSync(`suod apt-get install -y coreutils`, { stdio: "inherit" });
+    execSync(`sudo apt-get install -y coreutils`, { stdio: "inherit" });
   }
   {
     const htpasswd = generateHtpasswdString(users);
