@@ -45,3 +45,17 @@ jobs:
       #     go build -ldflags "-X main.Version=$latest_tag" -o ../../dist/mkcert
 
       - run: tree dist
+
+      - name: Set up Registry
+        uses: ./
+
+      - name: Registry にログイン
+        run: docker login localhost:5000 -u testuser -p testpass
+
+      - name: イメージを用意
+        run: |
+          echo 'FROM gcr.io/distroless/static'
+          docker build -t localhost:5000/static:latest .
+
+      - name: ローカルレジストリにプッシュ
+        run: docker image push localhost:5000/static:latest
