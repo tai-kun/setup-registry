@@ -1,0 +1,20 @@
+{
+  "excludes": [
+    "**/.history",
+    "**/dist",
+    "**/node_modules"
+  ],
+  "lineWidth": 80,
+  "typescript": {
+    "trailingCommas": "onlyMultiLine",
+    "singleBodyPosition": "nextLine",
+    "arrowFunction.useParentheses": "preferNone"
+  },
+  "json": {
+    "lineWidth": 999
+  },
+  "plugins": [
+    "https://plugins.dprint.dev/typescript-0.93.0.wasm",
+    "https://plugins.dprint.dev/json-0.19.3.wasm"
+  ]
+}

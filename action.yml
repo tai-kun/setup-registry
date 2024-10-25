@@ -1,0 +1,20 @@
+name: Set up Registry
+description: コンテナレジストリをセットアップする。
+author: tai-kun
+inputs:
+  version:
+    description: github.com/distribution/distribution のバージョン
+    required: false
+    default: latest
+  users:
+    description: ユーザーの一覧
+    required: false
+    default: testuser:testpass
+  addr:
+    description: アドレス
+    required: false
+    default: :5000
+runs:
+  using: node20
+  main: dist/main.js
+  post: dist/post.js

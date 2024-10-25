@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.10.0"
+
+      - run: npm ci
+
+      - run: node --run test
+
+      - run: node --run build
+
+      # - name: Set up Go
+      #   uses: actions/setup-go@v5
+      #   with:
+      #     go-version: latest
+
+      # - name: mkcert をビルド
+      #   run: |
+      #     # 一時ディレクトリに入る。
+      #     mkdir -p tmp/mkcert
+      #     cd tmp/mkcert
+
+      #     # mkcert リポジトリをクローンして、最新のタグをチェックアウトする。
+      #     git clone https://github.com/FiloSottile/mkcert.git .
+      #     latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+      #     git checkout $latest_tag
+
+      #     # ビルドする。
+      #     go env -w GOARCH=amd64
+      #     go build -ldflags "-X main.Version=$latest_tag" -o ../../dist/mkcert
+
+      - run: tree dist

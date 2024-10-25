@@ -1,0 +1,25 @@
+{
+  "name": "setup-registry",
+  "description": "コンテナレジストリをセットアップする。",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "author": "tai-kun",
+  "scripts": {
+    "test": "exit 0",
+    "build": "esbuild --target=node20 --outfile=dist/main.js --bundle --minify --platform=node --format=cjs src/main.ts && esbuild --target=node20 --outfile=dist/post.js --bundle --minify --platform=node --format=cjs src/post.ts"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1"
+  },
+  "devDependencies": {
+    "@tsconfig/strictest": "^2.0.5",
+    "@types/node": "^22.7.9",
+    "dprint": "^0.47.4",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.6.3"
+  },
+  "volta": {
+    "node": "22.10.0"
+  }
+}
