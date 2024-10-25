@@ -55,6 +55,8 @@ async function main(
   fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
   fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
 
+  execSync(`apt-get install coreutils`, { stdio: "inherit" });
+
   execSync(`chmod u+x "$MKCERT"`, {
     stdio: "inherit",
     env: {
