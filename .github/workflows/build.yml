@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
@@ -15,6 +16,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22.10.0"
+
+      - run: git checkout -b build
 
       - run: npm ci
 
@@ -48,13 +51,10 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist
           git commit -m "build: dist ディレクトリを更新"
-          git push origin main
+          git push origin build
 
       - name: プルリクエスト
         run: |
-          git fetch origin main
-          git checkout -b build
-          git merge origin/main
           gh pr create \
             --title "自動ビルド" \
             --body  "ビルド後に dist ディレクトリを更新する自動 PR" \

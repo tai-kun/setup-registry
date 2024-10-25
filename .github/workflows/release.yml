@@ -1,4 +1,4 @@
-name: アクションのバージョンを更新する
+name: リリース
 
 on:
   release:
