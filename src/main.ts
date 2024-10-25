@@ -151,6 +151,7 @@ async function downloadRegistry(
     execSync("wget -O registry.tar.gz" + url, { stdio: "inherit" });
     execSync("tar -xzvf registry.tar.gz registry", { stdio: "inherit" });
     execSync("rm registry.tar.gz", { stdio: "inherit" });
+    break;
   }
 
   return path.join(process.cwd(), "registry");
