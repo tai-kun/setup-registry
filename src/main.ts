@@ -43,73 +43,80 @@ async function main(
   fs.mkdirSync(carootdir, { recursive: true });
   fs.mkdirSync(configdir, { recursive: true });
 
+  {
+    execSync(`suod apt-get install -y coreutils`, { stdio: "inherit" });
+  }
+  {
+    const htpasswd = generateHtpasswdString(users);
+    const configYml = CONFIG_YML
+      .replaceAll("{{addr}}", inputs.addr)
+      .replaceAll("{{data}}", datadir)
+      .replaceAll("{{auth}}", authdir)
+      .replaceAll("{{certs}}", certsdir);
+    fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
+    fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
+  }
+
   const mkcert = await downloadMkcert("linux", "amd64", "1.4.4");
   const registry = await downloadRegistry("linux", "amd64", inputs.version);
-  const htpasswd = generateHtpasswdString(users);
-  const configYml = CONFIG_YML
-    .replaceAll("{{addr}}", inputs.addr)
-    .replaceAll("{{data}}", datadir)
-    .replaceAll("{{auth}}", authdir)
-    .replaceAll("{{certs}}", certsdir);
 
-  fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
-  fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
-
-  execSync(`apt-get install coreutils`, { stdio: "inherit" });
-
-  execSync(`chmod u+x "$MKCERT"`, {
-    stdio: "inherit",
-    env: {
-      MKCERT: mkcert,
-    },
-  });
-  execSync(`chmod u+x "$REGISTRY"`, {
-    stdio: "inherit",
-    env: {
-      REGISTRY: registry,
-    },
-  });
-
-  execSync(`"$MKCERT" -install`, {
-    stdio: "inherit",
-    env: {
-      MKCERT: mkcert,
-      CAROOT: carootdir,
-    },
-  });
-  execSync(
-    `"$MKCERT" -cert-file "$CERT_FILE" -key-file "$KEY_FILE" localhost`,
-    {
+  {
+    execSync(`chmod u+x "$MKCERT"`, {
       stdio: "inherit",
       env: {
-        ...process.env,
+        MKCERT: mkcert,
+      },
+    });
+    execSync(`chmod u+x "$REGISTRY"`, {
+      stdio: "inherit",
+      env: {
+        REGISTRY: registry,
+      },
+    });
+  }
+  {
+    execSync(`"$MKCERT" -install`, {
+      stdio: "inherit",
+      env: {
         MKCERT: mkcert,
         CAROOT: carootdir,
-        KEY_FILE: path.join(certsdir, "domain.key"),
-        CERT_FILE: path.join(certsdir, "domain.crt"),
       },
-    },
-  );
-
-  const out = execSync(
-    `"$REGISTRY" serve "$CONFIG_FILE" &; echo $!`,
-    {
-      encoding: "utf-8",
-      stdio: "pipe",
-      env: {
-        ...process.env,
-        REGISTRY: registry,
-        CONFIG_FILE: path.join(configdir, "config.yml"),
-        // https://github.com/distribution/distribution/issues/4270
-        OTEL_TRACES_EXPORTER: "none",
+    });
+    execSync(
+      `"$MKCERT" -cert-file "$CERT_FILE" -key-file "$KEY_FILE" localhost`,
+      {
+        stdio: "inherit",
+        env: {
+          ...process.env,
+          MKCERT: mkcert,
+          CAROOT: carootdir,
+          KEY_FILE: path.join(certsdir, "domain.key"),
+          CERT_FILE: path.join(certsdir, "domain.crt"),
+        },
       },
-    },
-  );
-  const pid = /(\d+)\s*$/.exec(out)![1]!;
+    );
+  }
+  {
+    const out = execSync(
+      `"$REGISTRY" serve "$CONFIG_FILE" &; echo $!`,
+      {
+        encoding: "utf-8",
+        stdio: "pipe",
+        env: {
+          ...process.env,
+          REGISTRY: registry,
+          CONFIG_FILE: path.join(configdir, "config.yml"),
+          // https://github.com/distribution/distribution/issues/4270
+          OTEL_TRACES_EXPORTER: "none",
+        },
+      },
+    );
+    const pid = /(\d+)\s*$/.exec(out)![1]!;
 
-  return {
-    pid,
-  };
+    return {
+      pid,
+    };
+  }
 }
 
 async function downloadMkcert(
