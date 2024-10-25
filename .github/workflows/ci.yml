@@ -76,7 +76,7 @@ jobs:
         run: |
           git add dist
           git commit -m "build: dist ディレクトリを更新"
-          git push origin --delete auto-build
+          git push origin --delete auto-build || true
           git push origin          auto-build
 
           echo '::notice::https://github.com/${{ github.repository }}/pull/new/auto-build'
