@@ -110,9 +110,6 @@ async function main(
       --name registry \\
       -e OTEL_TRACES_EXPORTER=none \\
       -p ${inputs.port}:5000 \\
-      -v ${JSON.stringify(authdir + ":/auth")} \\
-      -v ${JSON.stringify(certsdir + ":/certs")} \\
-      -v ${JSON.stringify(configdir + ":/config")} \\
       registry:${inputs.version} \\
       /config/config.yml
       `,
