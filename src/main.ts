@@ -104,7 +104,7 @@ async function downloadMkcert(
 ): Promise<string> {
   const url = "https://github.com/FiloSottile/mkcert/releases/download/v"
     + version + "/mkcert-v" + version + "-" + os + "-" + arch;
-  execSync("wget -O mkcert" + url, { stdio: "inherit" });
+  execSync("wget -O mkcert " + url, { stdio: "inherit" });
 
   return path.join(process.cwd(), "mkcert");
 }
