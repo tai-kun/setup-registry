@@ -83,12 +83,6 @@ async function main(
 
     const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
     const certFile = JSON.stringify(path.join(certsdir, "domain.crt"));
-    console.log("domain.crt");
-    console.log(execSync(`cat ${certFile}`, { stdio: "inherit" }));
-    console.log();
-    console.log("domain.key");
-    console.log(execSync(`cat ${keyFile}`, { stdio: "inherit" }));
-    console.log();
     execSync(
       `${mkcert} -cert-file ${certFile} -key-file ${keyFile} localhost`,
       {
@@ -99,6 +93,12 @@ async function main(
         },
       },
     );
+    console.log("domain.crt");
+    console.log(execSync(`cat ${certFile}`, { stdio: "inherit" }));
+    console.log();
+    console.log("domain.key");
+    console.log(execSync(`cat ${keyFile}`, { stdio: "inherit" }));
+    console.log();
   });
 
   await run("registry を起動", async () => {
