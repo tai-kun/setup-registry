@@ -108,7 +108,7 @@ async function main(
       -d \\
       --restart=always \\
       --name registry \\
-      -p ${inputs.port}:5000
+      -p ${inputs.port}:5000 \\
       -e OTEL_TRACES_EXPORTER=none \\
       -v ${JSON.stringify(authdir + ":/auth")} \\
       -v ${JSON.stringify(certsdir + ":/certs")} \\
