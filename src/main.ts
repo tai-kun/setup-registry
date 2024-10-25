@@ -43,6 +43,11 @@ async function main(
   fs.mkdirSync(carootdir, { recursive: true });
   fs.mkdirSync(configdir, { recursive: true });
 
+  run("依存関係をインストール", () => {
+    execSync(`sudo apt-get update -y`, { stdio: "inherit" });
+    execSync(`sudo apt-get install -y libnss3-tools`, { stdio: "inherit" });
+  });
+
   run("htpasswd を用意", () => {
     const htpasswd = generateHtpasswdString(users);
     fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
