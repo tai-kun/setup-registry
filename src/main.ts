@@ -44,11 +44,11 @@ async function main(
   fs.mkdirSync(carootdir, { recursive: true });
   fs.mkdirSync(configdir, { recursive: true });
 
-  {
-    execSync(`sudo apt-get update -y`, { stdio: "inherit" });
-    execSync(`sudo apt-get install -y coreutils`, { stdio: "inherit" });
-    execSync(`. ~/.bashrc`, { stdio: "inherit" });
-  }
+  // {
+  //   execSync(`sudo apt-get update -y`, { stdio: "inherit" });
+  //   execSync(`sudo apt-get install -y coreutils`, { stdio: "inherit" });
+  //   execSync(`. ~/.bashrc`, { stdio: "inherit" });
+  // }
   {
     const htpasswd = generateHtpasswdString(users);
     const configYml = CONFIG_YML
@@ -67,12 +67,14 @@ async function main(
     execSync(`chmod u+x "$MKCERT"`, {
       stdio: "inherit",
       env: {
+        ...process.env,
         MKCERT: mkcert,
       },
     });
     execSync(`chmod u+x "$REGISTRY"`, {
       stdio: "inherit",
       env: {
+        ...process.env,
         REGISTRY: registry,
       },
     });
@@ -81,6 +83,7 @@ async function main(
     execSync(`"$MKCERT" -install`, {
       stdio: "inherit",
       env: {
+        ...process.env,
         MKCERT: mkcert,
         CAROOT: carootdir,
       },
