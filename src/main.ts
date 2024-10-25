@@ -4,6 +4,7 @@ import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
+import { setTimeout } from "node:timers/promises";
 import CONFIG_YML from "./config.yml.js";
 
 main({
@@ -107,6 +108,7 @@ async function main(
         },
       },
     );
+    await setTimeout(3e3);
     const pid = /(\d+)\s*$/.exec(out)![1]!;
 
     return {
