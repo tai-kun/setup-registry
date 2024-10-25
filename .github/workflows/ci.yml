@@ -44,8 +44,6 @@ jobs:
       #     go env -w GOARCH=amd64
       #     go build -ldflags "-X main.Version=$latest_tag" -o ../../dist/mkcert
 
-      - run: tree dist
-
       - name: Set up Registry
         uses: ./
 
@@ -70,7 +68,9 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: ビルド
-        run: node --run build
+        run: |
+          node --run build
+          tree dist
 
       - name: コミット&プッシュ
         run: |
@@ -79,4 +79,4 @@ jobs:
           git push origin --delete auto-build
           git push origin          auto-build
 
-          echo '::notice::https://github.com/tai-kun/setup-registry/pull/new/auto-build'
+          echo '::notice::https://github.com/${{ github.repository }}/pull/new/auto-build'
