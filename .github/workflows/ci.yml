@@ -49,11 +49,6 @@ jobs:
       - name: Set up Registry
         uses: ./
 
-      - run: curl localhost:5000
-      - run: curl localhost:5000/
-      - run: curl localhost:5000/v2
-      - run: curl localhost:5000/v2/
-
       - uses: docker/login-action@v3
         with:
           registry: localhost:5000
@@ -62,7 +57,7 @@ jobs:
 
       - name: イメージを用意
         run: |
-          echo 'FROM gcr.io/distroless/static'
+          echo 'FROM gcr.io/distroless/static' >Dockerfile
           docker build -t localhost:5000/static:latest .
 
       - name: ローカルレジストリにプッシュ
