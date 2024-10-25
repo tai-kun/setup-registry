@@ -2,6 +2,12 @@ name: ビルド
 
 on:
   workflow_dispatch:
+    inputs:
+      force:
+        description: 強制
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build_create_pr:
@@ -17,7 +23,20 @@ jobs:
         with:
           node-version: "22.10.0"
 
-      - run: git checkout -b build
+      - name: 切り替え
+        run: |
+          git checkout -b build
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: 掃除
+        run: |
+          if [ -d dist ]; then
+            rm -rf dist
+            git add -A
+            git commit -m "クリーンアップ"
+          fi
+        if: ${{ inputs.force }}
 
       - run: npm ci
 
@@ -47,8 +66,6 @@ jobs:
 
       - name: コミット&プッシュ
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add dist
           git commit -m "build: dist ディレクトリを更新"
           git push origin build
