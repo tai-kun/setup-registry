@@ -2,12 +2,6 @@ name: ビルド
 
 on:
   workflow_dispatch:
-    inputs:
-      force:
-        description: 強制
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   build_create_pr:
@@ -18,25 +12,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22.10.0"
-
-      - name: 切り替え
+      - name: Checkout
         run: |
+          git push origin --delete build
           git checkout -b build
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: 掃除
-        run: |
-          if [ -d dist ]; then
-            rm -rf dist
-            git add -A
-            git commit -m "クリーンアップ"
-          fi
-        if: ${{ inputs.force }}
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.10.0"
 
       - run: npm ci
 
