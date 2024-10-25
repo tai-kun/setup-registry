@@ -1,5 +1,4 @@
-export default `
-version: 0.1
+export default `version: 0.1
 
 log:
   level: debug
@@ -10,12 +9,8 @@ log:
 storage:
   filesystem:
     rootdirectory: {{data}}
-  cache:
-    blobdescriptor: inmemory
   delete:
     enabled: true
-  tag:
-    concurrencylimit: 5
 
 http:
   addr: {{addr}}
