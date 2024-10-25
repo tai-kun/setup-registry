@@ -75,6 +75,11 @@ jobs:
       - name: コミット&プッシュ
         run: |
           git add dist
+
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+
           git commit -m "build: dist ディレクトリを更新"
           git push origin --delete auto-build || true
           git push origin          auto-build
