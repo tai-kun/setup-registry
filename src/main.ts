@@ -78,6 +78,12 @@ async function main(
 
     const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
     const certFile = JSON.stringify(path.join(certsdir, "domain.crt"));
+    console.log("domain.crt");
+    console.log(execSync(`cat ${certFile}`, { stdio: "inherit" }));
+    console.log();
+    console.log("domain.key");
+    console.log(execSync(`cat ${keyFile}`, { stdio: "inherit" }));
+    console.log();
     execSync(
       `${mkcert} -cert-file ${certFile} -key-file ${keyFile} localhost`,
       {
@@ -102,7 +108,7 @@ async function main(
       -v ${JSON.stringify(authdir + ":/auth")} \\
       -v ${JSON.stringify(certsdir + ":/certs")} \\
       -v ${JSON.stringify(configdir + ":/config")} \\
-      registry:${inputs.version}
+      registry:${inputs.version} \\
       /config/config.yml
       `,
       {
