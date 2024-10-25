@@ -47,7 +47,7 @@ async function main(
   {
     execSync(`sudo apt-get update -y`, { stdio: "inherit" });
     execSync(`sudo apt-get install -y coreutils`, { stdio: "inherit" });
-    execSync(`source ~/.bashrc`, { stdio: "inherit" });
+    execSync(`. ~/.bashrc`, { stdio: "inherit" });
   }
   {
     const htpasswd = generateHtpasswdString(users);
