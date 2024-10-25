@@ -32,21 +32,23 @@ async function main(
   }));
 
   const tmpdir = os.tmpdir();
+  const datadir = path.join(tmpdir, "registry", "data");
   const authdir = path.join(tmpdir, "registry", "auth");
   const certsdir = path.join(tmpdir, "registry", "certs");
   const carootdir = path.join(tmpdir, "registry", "caroot");
   const configdir = path.join(tmpdir, "registry", "config");
+  fs.mkdirSync(datadir, { recursive: true });
   fs.mkdirSync(authdir, { recursive: true });
   fs.mkdirSync(certsdir, { recursive: true });
   fs.mkdirSync(carootdir, { recursive: true });
   fs.mkdirSync(configdir, { recursive: true });
-  fs.mkdirSync("/var/lib/registry", { recursive: true });
 
   const mkcert = await downloadMkcert("linux", "amd64", "1.4.4");
   const registry = await downloadRegistry("linux", "amd64", inputs.version);
   const htpasswd = generateHtpasswdString(users);
   const configYml = CONFIG_YML
     .replaceAll("{{addr}}", inputs.addr)
+    .replaceAll("{{data}}", datadir)
     .replaceAll("{{auth}}", authdir)
     .replaceAll("{{certs}}", certsdir);
 
@@ -184,7 +186,7 @@ log:
 
 storage:
   filesystem:
-    rootdirectory: /var/lib/registry
+    rootdirectory: {{data}}
   cache:
     blobdescriptor: inmemory
   delete:
