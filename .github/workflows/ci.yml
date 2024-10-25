@@ -18,9 +18,11 @@ jobs:
         with:
           node-version: "22.10.0"
 
-      - run: npm ci
+      - name: 依存関係をインストール
+        run: npm ci
 
-      - run: node --run test
+      - name: テスト
+        run: node --run test
 
       # - name: Set up Go
       #   uses: actions/setup-go@v5
