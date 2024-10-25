@@ -49,10 +49,10 @@ async function main(
   {
     const htpasswd = generateHtpasswdString(users);
     const configYml = CONFIG_YML
-      .replaceAll("{{addr}}", inputs.addr)
-      .replaceAll("{{data}}", datadir)
-      .replaceAll("{{auth}}", authdir)
-      .replaceAll("{{certs}}", certsdir);
+      .replace(/{{addr}}/g, inputs.addr)
+      .replace(/{{data}}/g, datadir)
+      .replace(/{{auth}}/g, authdir)
+      .replace(/{{certs}}/g, certsdir);
     fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
     fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
   }
