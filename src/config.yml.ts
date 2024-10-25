@@ -26,9 +26,9 @@ http:
   #   prometheus:
   #     enabled: true
   #     path: /metrics
-  tls:
-    certificate: {{certs}}/domain.crt
-    key: {{certs}}/domain.key
+  # tls:
+  #   certificate: {{certs}}/domain.crt
+  #   key: {{certs}}/domain.key
 
 auth:
   htpasswd:
