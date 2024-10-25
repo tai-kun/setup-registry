@@ -44,6 +44,11 @@ jobs:
       #     go env -w GOARCH=amd64
       #     go build -ldflags "-X main.Version=$latest_tag" -o ../../dist/mkcert
 
+      - name: ビルド
+        run: |
+          node --run build
+          tree dist
+
       - name: Set up Registry
         uses: ./
 
@@ -66,11 +71,6 @@ jobs:
           git checkout -b auto-build
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: ビルド
-        run: |
-          node --run build
-          tree dist
 
       - name: コミット&プッシュ
         run: |
