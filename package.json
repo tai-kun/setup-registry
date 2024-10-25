@@ -7,7 +7,7 @@
   "author": "tai-kun",
   "scripts": {
     "test": "exit 0",
-    "build": "esbuild --target=node20 --outfile=dist/main.js --bundle --minify --platform=node --format=cjs src/main.ts && esbuild --target=node20 --outfile=dist/post.js --bundle --minify --platform=node --format=cjs src/post.ts"
+    "build": "esbuild --target=node20 --outfile=dist/main.js --bundle --minify --platform=node --format=esm src/main.ts && esbuild --target=node20 --outfile=dist/post.js --bundle --minify --platform=node --format=esm src/post.ts"
   },
   "dependencies": {
     "@actions/core": "^1.11.1"
