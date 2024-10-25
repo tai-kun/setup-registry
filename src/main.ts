@@ -59,6 +59,10 @@ async function main(
       .replace(/{{certs}}/g, certsdir);
     fs.writeFileSync(path.join(authdir, "htpasswd"), htpasswd);
     fs.writeFileSync(path.join(configdir, "config.yml"), configYml);
+    console.log("htpasswd:");
+    console.log(htpasswd);
+    console.log("config.yml:");
+    console.log(configYml);
   }
 
   const mkcert = JSON.stringify(
@@ -84,7 +88,7 @@ async function main(
     const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
     const certFile = JSON.stringify(path.join(certsdir, "domain.crt"));
     execSync(
-      `${mkcert} -cert-file ${keyFile} -key-file ${certFile} localhost`,
+      `${mkcert} -cert-file ${certFile} -key-file ${keyFile} localhost`,
       {
         stdio: "inherit",
         env: {
