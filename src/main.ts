@@ -116,6 +116,7 @@ async function main(
     execSync(
       `docker run \\
       -d \\
+      --network bridge \\
       --restart=always \\
       --name ${JSON.stringify(inputs.name)} \\
       -e OTEL_TRACES_EXPORTER=none \\
