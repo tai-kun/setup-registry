@@ -94,7 +94,8 @@ async function main(
     const certFile = JSON.stringify(path.join(certsdir, "domain.crt"));
     const keyFile = JSON.stringify(path.join(certsdir, "domain.key"));
     execSync(
-      `${mkcert} -cert-file ${certFile} -key-file ${keyFile} localhost`,
+      `${mkcert} -cert-file ${certFile} -key-file ${keyFile} `
+        + `localhost ${JSON.stringify(inputs.name)}`,
       {
         stdio: "inherit",
         env: {
